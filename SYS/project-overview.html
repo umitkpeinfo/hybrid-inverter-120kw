@@ -1,0 +1,884 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>120 kW Hybrid Inverter System - Project Overview</title>
+    <style>
+        :root {
+            --bg-primary: #0f172a;
+            --bg-secondary: #1e293b;
+            --bg-card: #334155;
+            --accent-blue: #3b82f6;
+            --accent-green: #10b981;
+            --accent-purple: #8b5cf6;
+            --accent-orange: #f59e0b;
+            --accent-red: #ef4444;
+            --accent-cyan: #06b6d4;
+            --text-primary: #f1f5f9;
+            --text-secondary: #94a3b8;
+            --border-color: #475569;
+        }
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+        }
+        .header {
+            background: linear-gradient(135deg, #1e40af 0%, #7c3aed 50%, #059669 100%);
+            padding: 2rem;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
+        }
+        .header h1 { font-size: 2rem; margin-bottom: 0.5rem; }
+        .header p { color: rgba(255,255,255,0.8); font-size: 1rem; }
+        .header-stats {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-top: 1rem;
+            flex-wrap: wrap;
+        }
+        .header-stat {
+            background: rgba(0,0,0,0.3);
+            padding: 0.5rem 1.5rem;
+            border-radius: 8px;
+        }
+        .header-stat .value { font-size: 1.5rem; font-weight: bold; color: #4ade80; }
+        .header-stat .label { font-size: 0.75rem; color: rgba(255,255,255,0.7); }
+        nav {
+            background: var(--bg-secondary);
+            padding: 0.75rem;
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+            border-bottom: 1px solid var(--border-color);
+            position: sticky;
+            top: 120px;
+            z-index: 99;
+        }
+        nav button {
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            color: var(--text-secondary);
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: all 0.2s;
+            font-size: 0.875rem;
+        }
+        nav button:hover, nav button.active {
+            background: var(--accent-blue);
+            color: white;
+            border-color: var(--accent-blue);
+        }
+        .container { max-width: 1400px; margin: 0 auto; padding: 1.5rem; }
+        .section { display: none; animation: fadeIn 0.3s ease; }
+        .section.active { display: block; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .grid { display: grid; gap: 1rem; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+        .grid-3 { grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); }
+        .grid-4 { grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+        .card {
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 1.25rem;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .card:hover { transform: translateY(-2px); box-shadow: 0 8px 25px rgba(0,0,0,0.3); }
+        .card h3 {
+            font-size: 1rem;
+            margin-bottom: 1rem;
+            padding-bottom: 0.5rem;
+            border-bottom: 2px solid var(--accent-blue);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .card h3 .icon { font-size: 1.25rem; }
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 0.4rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.05);
+        }
+        .spec-row:last-child { border-bottom: none; }
+        .spec-label { color: var(--text-secondary); font-size: 0.875rem; }
+        .spec-value { font-weight: 600; font-family: 'Consolas', monospace; }
+        .spec-value.highlight { color: var(--accent-green); }
+        .badge {
+            display: inline-block;
+            padding: 0.2rem 0.6rem;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .badge-blue { background: rgba(59,130,246,0.2); color: var(--accent-blue); }
+        .badge-green { background: rgba(16,185,129,0.2); color: var(--accent-green); }
+        .badge-purple { background: rgba(139,92,246,0.2); color: var(--accent-purple); }
+        .badge-orange { background: rgba(245,158,11,0.2); color: var(--accent-orange); }
+        .diagram-container {
+            background: var(--bg-card);
+            border-radius: 12px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+        .diagram-container svg { width: 100%; height: auto; min-width: 800px; }
+        table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+        th, td { padding: 0.75rem; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background: var(--bg-card); color: var(--accent-blue); font-weight: 600; }
+        tr:hover { background: rgba(59,130,246,0.05); }
+        .progress-bar {
+            height: 8px;
+            background: var(--bg-card);
+            border-radius: 4px;
+            overflow: hidden;
+            margin-top: 0.5rem;
+        }
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--accent-blue), var(--accent-green));
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+        .block-diagram {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 0.5rem;
+            align-items: center;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: 8px;
+            margin: 1rem 0;
+        }
+        .block {
+            padding: 1rem;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .block:hover { transform: scale(1.05); border-color: white; }
+        .block-title { font-weight: bold; font-size: 0.875rem; }
+        .block-sub { font-size: 0.7rem; opacity: 0.8; margin-top: 0.25rem; }
+        .arrow { text-align: center; color: var(--text-secondary); font-size: 1.5rem; }
+        .sensing-grid { grid-template-columns: repeat(4, 1fr); gap: 0.75rem; }
+        .comm-block {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+            border-left: 4px solid var(--accent-purple);
+        }
+        .legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 1rem; font-size: 0.8rem; }
+        .legend-item { display: flex; align-items: center; gap: 0.5rem; }
+        .legend-color { width: 16px; height: 16px; border-radius: 4px; }
+        pre {
+            background: var(--bg-card);
+            padding: 1rem;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', monospace;
+            font-size: 0.8rem;
+            line-height: 1.4;
+        }
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 0.5rem;
+        }
+        .status-complete { background: var(--accent-green); }
+        .status-pending { background: var(--accent-orange); }
+        .collapsible { cursor: pointer; user-select: none; }
+        .collapsible::before { content: '▶ '; font-size: 0.75rem; }
+        .collapsible.open::before { content: '▼ '; }
+        .collapsible-content { display: none; margin-top: 0.5rem; }
+        .collapsible.open + .collapsible-content { display: block; }
+        footer {
+            background: var(--bg-secondary);
+            padding: 1.5rem;
+            text-align: center;
+            color: var(--text-secondary);
+            margin-top: 2rem;
+            border-top: 1px solid var(--border-color);
+        }
+    </style>
+</head>
+<body>
+    <header class="header">
+        <h1>🔋 120 kW Hybrid Inverter System</h1>
+        <p>3-Level T-Type | Infineon IMT65R010M2H CoolSiC™ G2 | STM32G474RET6</p>
+        <div class="header-stats">
+            <div class="header-stat"><div class="value">120 kW</div><div class="label">Rated Power</div></div>
+            <div class="header-stat"><div class="value">99.2%</div><div class="label">Peak Efficiency</div></div>
+            <div class="header-stat"><div class="value">100 kHz</div><div class="label">Switching Freq</div></div>
+            <div class="header-stat"><div class="value">T-Type</div><div class="label">Topology</div></div>
+            <div class="header-stat"><div class="value">v2.1</div><div class="label">Document</div></div>
+        </div>
+    </header>
+
+    <nav>
+        <button class="active" onclick="showSection('overview')">📊 Overview</button>
+        <button onclick="showSection('architecture')">🏗️ Architecture</button>
+        <button onclick="showSection('electrical')">⚡ Electrical</button>
+        <button onclick="showSection('semiconductor')">🔌 Semiconductors</button>
+        <button onclick="showSection('sensing')">📡 Sensing</button>
+        <button onclick="showSection('magnetics')">🧲 Magnetics</button>
+        <button onclick="showSection('thermal')">🌡️ Thermal</button>
+        <button onclick="showSection('protection')">🛡️ Protection</button>
+        <button onclick="showSection('comm')">📶 Communication</button>
+        <button onclick="showSection('testing')">🧪 Testing</button>
+    </nav>
+
+    <div class="container">
+        <!-- OVERVIEW SECTION -->
+        <div id="overview" class="section active">
+            <h2 style="margin-bottom: 1.5rem;">System Overview</h2>
+            
+            <div class="grid grid-4" style="margin-bottom: 1.5rem;">
+                <div class="card" style="border-left: 4px solid var(--accent-blue);">
+                    <h3><span class="icon">🎯</span> Topology</h3>
+                    <div class="spec-row"><span class="spec-label">Type</span><span class="spec-value highlight">3-Level T-Type</span></div>
+                    <div class="spec-row"><span class="spec-label">Operation</span><span class="spec-value">Bidirectional</span></div>
+                    <div class="spec-row"><span class="spec-label">Grid Mode</span><span class="spec-value">Tied + Off-Grid</span></div>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--accent-green);">
+                    <h3><span class="icon">⚡</span> Power Rating</h3>
+                    <div class="spec-row"><span class="spec-label">Inverter</span><span class="spec-value highlight">120 kW</span></div>
+                    <div class="spec-row"><span class="spec-label">Rectifier</span><span class="spec-value highlight">120 kW</span></div>
+                    <div class="spec-row"><span class="spec-label">Apparent</span><span class="spec-value">132 kVA</span></div>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--accent-purple);">
+                    <h3><span class="icon">🎛️</span> Controller</h3>
+                    <div class="spec-row"><span class="spec-label">MCU</span><span class="spec-value highlight">STM32G474</span></div>
+                    <div class="spec-row"><span class="spec-label">Core</span><span class="spec-value">M4F @ 170MHz</span></div>
+                    <div class="spec-row"><span class="spec-label">PWM</span><span class="spec-value">HRTIM</span></div>
+                </div>
+                <div class="card" style="border-left: 4px solid var(--accent-orange);">
+                    <h3><span class="icon">📈</span> Efficiency</h3>
+                    <div class="spec-row"><span class="spec-label">Peak</span><span class="spec-value highlight">≥99.2%</span></div>
+                    <div class="spec-row"><span class="spec-label">EU Weighted</span><span class="spec-value">≥98.8%</span></div>
+                    <div class="spec-row"><span class="spec-label">Losses</span><span class="spec-value">~1.0 kW</span></div>
+                </div>
+            </div>
+
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <h3><span class="icon">🔄</span> Power Flow Block Diagram</h3>
+                <div class="block-diagram">
+                    <div class="block" style="background: #1e40af;">
+                        <div class="block-title">BATTERY</div>
+                        <div class="block-sub">700-1000V</div>
+                        <div class="block-sub">180A max</div>
+                    </div>
+                    <div class="arrow">⟷</div>
+                    <div class="block" style="background: #4338ca;">
+                        <div class="block-title">DC-LINK</div>
+                        <div class="block-sub">Split Cap</div>
+                        <div class="block-sub">≥2 mF</div>
+                    </div>
+                    <div class="arrow">⟷</div>
+                    <div class="block" style="background: #7c3aed;">
+                        <div class="block-title">T-TYPE</div>
+                        <div class="block-sub">36× SiC</div>
+                        <div class="block-sub">100 kHz</div>
+                    </div>
+                    <div class="arrow">⟷</div>
+                    <div class="block" style="background: #059669;">
+                        <div class="block-title">LCL FILTER</div>
+                        <div class="block-sub">60µH/20µH</div>
+                        <div class="block-sub">THD<0.5%</div>
+                    </div>
+                    <div class="arrow">⟷</div>
+                    <div class="block" style="background: #dc2626;">
+                        <div class="block-title">GRID</div>
+                        <div class="block-sub">480 VAC</div>
+                        <div class="block-sub">50/60 Hz</div>
+                    </div>
+                </div>
+                <div class="legend">
+                    <div class="legend-item"><div class="legend-color" style="background: #1e40af;"></div> DC Side</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #7c3aed;"></div> Power Stage</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #059669;"></div> Filter</div>
+                    <div class="legend-item"><div class="legend-color" style="background: #dc2626;"></div> AC Side</div>
+                </div>
+            </div>
+
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">✅</span> Key Decisions (Finalized)</h3>
+                    <table>
+                        <tr><td><span class="status-indicator status-complete"></span>Topology</td><td><span class="badge badge-green">3-Level T-Type</span></td></tr>
+                        <tr><td><span class="status-indicator status-complete"></span>Processor</td><td><span class="badge badge-blue">STM32G474RET6</span></td></tr>
+                        <tr><td><span class="status-indicator status-complete"></span>Semiconductor</td><td><span class="badge badge-purple">IMT65R010M2H</span></td></tr>
+                        <tr><td><span class="status-indicator status-complete"></span>Switching Freq</td><td><span class="badge badge-orange">100 kHz</span></td></tr>
+                        <tr><td><span class="status-indicator status-complete"></span>Gate Driver</td><td><span class="badge badge-blue">1ED3122MU12H</span></td></tr>
+                    </table>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📋</span> Project Status</h3>
+                    <div style="margin-bottom: 1rem;">
+                        <div class="spec-row"><span>System Specification</span><span class="badge badge-green">Complete</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <div class="spec-row"><span>Architecture Design</span><span class="badge badge-green">Complete</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+                    </div>
+                    <div style="margin-bottom: 1rem;">
+                        <div class="spec-row"><span>Thermal Analysis</span><span class="badge badge-green">Complete</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 100%;"></div></div>
+                    </div>
+                    <div>
+                        <div class="spec-row"><span>Prototype Build</span><span class="badge badge-orange">Pending</span></div>
+                        <div class="progress-bar"><div class="progress-fill" style="width: 0%;"></div></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ARCHITECTURE SECTION -->
+        <div id="architecture" class="section">
+            <h2 style="margin-bottom: 1.5rem;">System Architecture</h2>
+            
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <h3><span class="icon">🏗️</span> Complete System Block Diagram</h3>
+                <div class="diagram-container">
+                    <svg viewBox="0 0 900 450">
+                        <rect width="900" height="450" fill="#1e293b"/>
+                        
+                        <!-- Power Stage -->
+                        <rect x="20" y="60" width="90" height="80" fill="#1e40af" rx="6"/>
+                        <text x="65" y="95" fill="white" text-anchor="middle" font-size="11" font-weight="bold">BATTERY</text>
+                        <text x="65" y="112" fill="#93c5fd" text-anchor="middle" font-size="9">700-1000V</text>
+                        <text x="65" y="127" fill="#93c5fd" text-anchor="middle" font-size="9">180A max</text>
+                        
+                        <rect x="130" y="60" width="70" height="80" fill="#4338ca" rx="6"/>
+                        <text x="165" y="95" fill="white" text-anchor="middle" font-size="10" font-weight="bold">DC-LINK</text>
+                        <text x="165" y="112" fill="#a5b4fc" text-anchor="middle" font-size="9">≥2 mF</text>
+                        
+                        <rect x="220" y="50" width="110" height="100" fill="#7c3aed" rx="6"/>
+                        <text x="275" y="80" fill="white" text-anchor="middle" font-size="11" font-weight="bold">T-TYPE</text>
+                        <text x="275" y="97" fill="#c4b5fd" text-anchor="middle" font-size="8">IMT65R010M2H</text>
+                        <text x="275" y="112" fill="#c4b5fd" text-anchor="middle" font-size="8">36× CoolSiC G2</text>
+                        <text x="275" y="130" fill="#10b981" text-anchor="middle" font-size="9" font-weight="bold">100 kHz</text>
+                        
+                        <rect x="350" y="60" width="80" height="80" fill="#059669" rx="6"/>
+                        <text x="390" y="90" fill="white" text-anchor="middle" font-size="10" font-weight="bold">LCL</text>
+                        <text x="390" y="107" fill="#6ee7b7" text-anchor="middle" font-size="8">Lc: 60µH</text>
+                        <text x="390" y="122" fill="#6ee7b7" text-anchor="middle" font-size="8">Lg: 20µH</text>
+                        
+                        <rect x="450" y="60" width="80" height="80" fill="#dc2626" rx="6"/>
+                        <text x="490" y="95" fill="white" text-anchor="middle" font-size="11" font-weight="bold">GRID</text>
+                        <text x="490" y="112" fill="#fca5a5" text-anchor="middle" font-size="9">480 VAC</text>
+                        
+                        <!-- Arrows -->
+                        <path d="M 110 100 L 125 100" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 200 100 L 215 100" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 330 100 L 345 100" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+                        <path d="M 430 100 L 445 100" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+                        
+                        <!-- Sensing -->
+                        <rect x="60" y="180" width="100" height="60" fill="#0891b2" rx="6"/>
+                        <text x="110" y="205" fill="white" text-anchor="middle" font-size="9" font-weight="bold">CURRENT SENSE</text>
+                        <text x="110" y="220" fill="#67e8f9" text-anchor="middle" font-size="7">Shunt + Hall</text>
+                        <text x="110" y="232" fill="#67e8f9" text-anchor="middle" font-size="7">450kHz BW</text>
+                        
+                        <rect x="180" y="180" width="100" height="60" fill="#0e7490" rx="6"/>
+                        <text x="230" y="205" fill="white" text-anchor="middle" font-size="9" font-weight="bold">TEMP SENSE</text>
+                        <text x="230" y="220" fill="#67e8f9" text-anchor="middle" font-size="7">8× NTC</text>
+                        <text x="230" y="232" fill="#67e8f9" text-anchor="middle" font-size="7">-40 to 150°C</text>
+                        
+                        <rect x="300" y="180" width="100" height="60" fill="#155e75" rx="6"/>
+                        <text x="350" y="205" fill="white" text-anchor="middle" font-size="9" font-weight="bold">VOLTAGE SENSE</text>
+                        <text x="350" y="220" fill="#67e8f9" text-anchor="middle" font-size="7">AMC1311 Iso</text>
+                        <text x="350" y="232" fill="#67e8f9" text-anchor="middle" font-size="7">±0.5%</text>
+                        
+                        <rect x="420" y="180" width="100" height="60" fill="#ea580c" rx="6"/>
+                        <text x="470" y="205" fill="white" text-anchor="middle" font-size="9" font-weight="bold">PROTECTION</text>
+                        <text x="470" y="220" fill="#fdba74" text-anchor="middle" font-size="7">DESAT < 3µs</text>
+                        <text x="470" y="232" fill="#fdba74" text-anchor="middle" font-size="7">OV/UV/OC/OT</text>
+                        
+                        <!-- Controller -->
+                        <rect x="140" y="280" width="240" height="70" fill="#1d4ed8" rx="6"/>
+                        <text x="260" y="305" fill="white" text-anchor="middle" font-size="12" font-weight="bold">STM32G474RET6</text>
+                        <text x="260" y="322" fill="#93c5fd" text-anchor="middle" font-size="9">ARM Cortex-M4F @ 170 MHz</text>
+                        <text x="260" y="338" fill="#60a5fa" text-anchor="middle" font-size="8">HRTIM • 5× ADC • CORDIC • CAN-FD</text>
+                        
+                        <!-- Communication -->
+                        <rect x="550" y="60" width="75" height="55" fill="#6366f1" rx="6"/>
+                        <text x="587" y="85" fill="white" text-anchor="middle" font-size="9" font-weight="bold">RS485</text>
+                        <text x="587" y="100" fill="#a5b4fc" text-anchor="middle" font-size="7">Modbus RTU</text>
+                        
+                        <rect x="640" y="60" width="75" height="55" fill="#4f46e5" rx="6"/>
+                        <text x="677" y="85" fill="white" text-anchor="middle" font-size="9" font-weight="bold">ETHERNET</text>
+                        <text x="677" y="100" fill="#a5b4fc" text-anchor="middle" font-size="7">Modbus TCP</text>
+                        
+                        <rect x="550" y="130" width="75" height="55" fill="#7c3aed" rx="6"/>
+                        <text x="587" y="155" fill="white" text-anchor="middle" font-size="9" font-weight="bold">CAN-FD</text>
+                        <text x="587" y="170" fill="#c4b5fd" text-anchor="middle" font-size="7">BMS Interface</text>
+                        
+                        <rect x="640" y="130" width="75" height="55" fill="#8b5cf6" rx="6"/>
+                        <text x="677" y="155" fill="white" text-anchor="middle" font-size="9" font-weight="bold">DIG I/O</text>
+                        <text x="677" y="170" fill="#c4b5fd" text-anchor="middle" font-size="7">4DI / 4DO</text>
+                        
+                        <rect x="730" y="60" width="75" height="125" fill="#475569" rx="6"/>
+                        <text x="767" y="90" fill="white" text-anchor="middle" font-size="9" font-weight="bold">AUX PSU</text>
+                        <text x="767" y="110" fill="#94a3b8" text-anchor="middle" font-size="7">24V → 3.3V</text>
+                        <text x="767" y="125" fill="#94a3b8" text-anchor="middle" font-size="7">→ 5V</text>
+                        <text x="767" y="140" fill="#94a3b8" text-anchor="middle" font-size="7">→ 18V/-4V</text>
+                        <text x="767" y="160" fill="#fcd34d" text-anchor="middle" font-size="7">9× Isolated</text>
+                        
+                        <!-- Signal lines -->
+                        <line x1="260" y1="280" x2="260" y2="240" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="110" y1="180" x2="110" y2="155" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        <line x1="110" y1="155" x2="275" y2="155" stroke="#22d3ee" stroke-width="1.5" stroke-dasharray="4,3"/>
+                        
+                        <!-- Defs -->
+                        <defs>
+                            <marker id="arrow" markerWidth="10" markerHeight="7" refX="9" refY="3.5" orient="auto">
+                                <polygon points="0 0, 10 3.5, 0 7" fill="#6b7280"/>
+                            </marker>
+                        </defs>
+                        
+                        <!-- Labels -->
+                        <rect x="550" y="280" width="255" height="70" fill="#1f2937" rx="6" stroke="#374151"/>
+                        <text x="677" y="302" fill="#10b981" text-anchor="middle" font-size="10" font-weight="bold">T-Type + IMT65R010M2H @ 100 kHz</text>
+                        <text x="600" y="325" fill="#9ca3af" font-size="9">Peak: 99.2%</text>
+                        <text x="677" y="325" fill="#9ca3af" font-size="9">THD: &lt;0.5%</text>
+                        <text x="760" y="325" fill="#9ca3af" font-size="9">1.0kW loss</text>
+                    </svg>
+                </div>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">🔧</span> Control Architecture</h3>
+                    <div class="spec-row"><span class="spec-label">Current Loop</span><span class="spec-value">PR Controller, 2 kHz BW</span></div>
+                    <div class="spec-row"><span class="spec-label">Voltage Loop</span><span class="spec-value">PI Controller, 200 Hz BW</span></div>
+                    <div class="spec-row"><span class="spec-label">PLL</span><span class="spec-value">SRF-PLL, 50 Hz BW</span></div>
+                    <div class="spec-row"><span class="spec-label">PWM</span><span class="spec-value highlight">SVPWM 100 kHz</span></div>
+                    <div class="spec-row"><span class="spec-label">NP Balance</span><span class="spec-value">Active injection</span></div>
+                    <div class="spec-row"><span class="spec-label">Control Rate</span><span class="spec-value highlight">200 kHz</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">⏱️</span> Timing Requirements</h3>
+                    <div class="spec-row"><span class="spec-label">PWM Period</span><span class="spec-value">10 µs (100 kHz)</span></div>
+                    <div class="spec-row"><span class="spec-label">Dead Time</span><span class="spec-value highlight">80 ns</span></div>
+                    <div class="spec-row"><span class="spec-label">ADC Sampling</span><span class="spec-value">Sync with PWM</span></div>
+                    <div class="spec-row"><span class="spec-label">HRTIM Resolution</span><span class="spec-value">184 ps</span></div>
+                    <div class="spec-row"><span class="spec-label">Protection Response</span><span class="spec-value">&lt;10 µs</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- ELECTRICAL SECTION -->
+        <div id="electrical" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Electrical Specifications</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">🔋</span> DC Input (Battery Side)</h3>
+                    <div class="spec-row"><span class="spec-label">Voltage Range</span><span class="spec-value highlight">700 - 1000 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">Nominal Voltage</span><span class="spec-value highlight">850 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">Maximum Voltage</span><span class="spec-value">1100 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">Full Power Range</span><span class="spec-value">750 - 1000 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">Max Current (Discharge)</span><span class="spec-value highlight">180 A</span></div>
+                    <div class="spec-row"><span class="spec-label">Max Current (Charge)</span><span class="spec-value highlight">180 A</span></div>
+                    <div class="spec-row"><span class="spec-label">Current Ripple</span><span class="spec-value">&lt;5% p-p</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">⚡</span> AC Output (Grid Side)</h3>
+                    <div class="spec-row"><span class="spec-label">Nominal Voltage</span><span class="spec-value highlight">480 VAC (L-L)</span></div>
+                    <div class="spec-row"><span class="spec-label">Voltage Range</span><span class="spec-value">408 - 528 VAC</span></div>
+                    <div class="spec-row"><span class="spec-label">Voltage Tolerance</span><span class="spec-value">-15% / +10%</span></div>
+                    <div class="spec-row"><span class="spec-label">Grid Frequency</span><span class="spec-value">50 / 60 Hz</span></div>
+                    <div class="spec-row"><span class="spec-label">Frequency Range</span><span class="spec-value">±5 Hz</span></div>
+                    <div class="spec-row"><span class="spec-label">Max AC Current</span><span class="spec-value highlight">160 A RMS</span></div>
+                    <div class="spec-row"><span class="spec-label">Peak AC Current</span><span class="spec-value">226 A</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📊</span> Power Quality</h3>
+                    <div class="spec-row"><span class="spec-label">Current THD</span><span class="spec-value highlight">&lt;0.5%</span></div>
+                    <div class="spec-row"><span class="spec-label">Voltage THD</span><span class="spec-value">&lt;3%</span></div>
+                    <div class="spec-row"><span class="spec-label">Power Factor @ Rated</span><span class="spec-value">&gt;0.99</span></div>
+                    <div class="spec-row"><span class="spec-label">DC Injection</span><span class="spec-value">&lt;0.5%</span></div>
+                    <div class="spec-row"><span class="spec-label">PF Range</span><span class="spec-value">0.8 lead to 0.8 lag</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🔌</span> LCL Filter (100 kHz)</h3>
+                    <div class="spec-row"><span class="spec-label">Converter Inductance (Lc)</span><span class="spec-value highlight">60 µH</span></div>
+                    <div class="spec-row"><span class="spec-label">Grid Inductance (Lg)</span><span class="spec-value">20 µH</span></div>
+                    <div class="spec-row"><span class="spec-label">Filter Capacitance (Cf)</span><span class="spec-value">15 µF</span></div>
+                    <div class="spec-row"><span class="spec-label">Damping Resistor (Rd)</span><span class="spec-value">0.3 Ω</span></div>
+                    <div class="spec-row"><span class="spec-label">Resonance Frequency</span><span class="spec-value">10 kHz</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SEMICONDUCTOR SECTION -->
+        <div id="semiconductor" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Semiconductor Specifications</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">🔌</span> IMT65R010M2H CoolSiC™ G2</h3>
+                    <div class="spec-row"><span class="spec-label">Manufacturer</span><span class="spec-value highlight">Infineon Technologies</span></div>
+                    <div class="spec-row"><span class="spec-label">Technology</span><span class="spec-value highlight">CoolSiC™ G2 (2nd Gen)</span></div>
+                    <div class="spec-row"><span class="spec-label">Package</span><span class="spec-value">PG-HSOF-8 (TOLL)</span></div>
+                    <div class="spec-row"><span class="spec-label">Drain-Source Voltage</span><span class="spec-value highlight">650 V</span></div>
+                    <div class="spec-row"><span class="spec-label">RDS(on) @ 25°C</span><span class="spec-value highlight">10 mΩ</span></div>
+                    <div class="spec-row"><span class="spec-label">RDS(on) @ 175°C</span><span class="spec-value">~16 mΩ</span></div>
+                    <div class="spec-row"><span class="spec-label">Continuous Current</span><span class="spec-value">168 A @ 25°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Gate Threshold</span><span class="spec-value">4.5 V (typ)</span></div>
+                    <div class="spec-row"><span class="spec-label">Max Junction Temp</span><span class="spec-value">175°C</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">⚡</span> Switching Characteristics</h3>
+                    <div class="spec-row"><span class="spec-label">Turn-on Energy (Eon)</span><span class="spec-value">~0.30 mJ</span></div>
+                    <div class="spec-row"><span class="spec-label">Turn-off Energy (Eoff)</span><span class="spec-value">~0.15 mJ</span></div>
+                    <div class="spec-row"><span class="spec-label">Total Switching</span><span class="spec-value">~0.45 mJ</span></div>
+                    <div class="spec-row"><span class="spec-label">Rise Time</span><span class="spec-value">~20 ns</span></div>
+                    <div class="spec-row"><span class="spec-label">Fall Time</span><span class="spec-value">~15 ns</span></div>
+                    <div class="spec-row"><span class="spec-label">dV/dt</span><span class="spec-value">10-20 kV/µs</span></div>
+                    <div class="spec-row"><span class="spec-label">Reverse Recovery</span><span class="spec-value">None (SiC diode)</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🎛️</span> Gate Driver: 1ED3122MU12H</h3>
+                    <div class="spec-row"><span class="spec-label">Manufacturer</span><span class="spec-value">Infineon</span></div>
+                    <div class="spec-row"><span class="spec-label">CMTI</span><span class="spec-value highlight">&gt;200 kV/µs</span></div>
+                    <div class="spec-row"><span class="spec-label">Peak Current</span><span class="spec-value">12A / 12A</span></div>
+                    <div class="spec-row"><span class="spec-label">Turn-on Voltage</span><span class="spec-value">+18 V</span></div>
+                    <div class="spec-row"><span class="spec-label">Turn-off Voltage</span><span class="spec-value">-4 V</span></div>
+                    <div class="spec-row"><span class="spec-label">DESAT Protection</span><span class="spec-value">Integrated</span></div>
+                    <div class="spec-row"><span class="spec-label">Propagation Delay</span><span class="spec-value">&lt;100 ns</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📦</span> Device Configuration</h3>
+                    <div class="spec-row"><span class="spec-label">Total Device Count</span><span class="spec-value highlight">36 MOSFETs</span></div>
+                    <div class="spec-row"><span class="spec-label">Devices per Phase</span><span class="spec-value">12</span></div>
+                    <div class="spec-row"><span class="spec-label">T1 (Upper Main)</span><span class="spec-value">2× parallel</span></div>
+                    <div class="spec-row"><span class="spec-label">T4 (Lower Main)</span><span class="spec-value">2× parallel</span></div>
+                    <div class="spec-row"><span class="spec-label">T2-T3 (Bidirectional)</span><span class="spec-value">4× (2S2P)</span></div>
+                    <div class="spec-row"><span class="spec-label">Effective RDS(on)</span><span class="spec-value">5 mΩ/position</span></div>
+                    <div class="spec-row"><span class="spec-label">Gate Drivers</span><span class="spec-value">18× total</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- SENSING SECTION -->
+        <div id="sensing" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Sensing & Measurement</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">⚡</span> DC Current Sensing</h3>
+                    <div class="spec-row"><span class="spec-label">Sensor Type</span><span class="spec-value highlight">Shunt + Diff Amp</span></div>
+                    <div class="spec-row"><span class="spec-label">Shunt Value</span><span class="spec-value">100 µΩ</span></div>
+                    <div class="spec-row"><span class="spec-label">Shunt Power</span><span class="spec-value">20 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Amplifier IC</span><span class="spec-value highlight">INA240A4</span></div>
+                    <div class="spec-row"><span class="spec-label">Gain</span><span class="spec-value">200 V/V</span></div>
+                    <div class="spec-row"><span class="spec-label">Bandwidth</span><span class="spec-value">400 kHz</span></div>
+                    <div class="spec-row"><span class="spec-label">Accuracy</span><span class="spec-value">±0.5%</span></div>
+                    <div class="spec-row"><span class="spec-label">Range</span><span class="spec-value">±250 A</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🌊</span> AC Phase Current Sensing</h3>
+                    <div class="spec-row"><span class="spec-label">Sensor Type</span><span class="spec-value highlight">Hall Effect (Closed Loop)</span></div>
+                    <div class="spec-row"><span class="spec-label">Part Number</span><span class="spec-value highlight">LEM HLSR 50-P/SP33</span></div>
+                    <div class="spec-row"><span class="spec-label">Nominal Current</span><span class="spec-value">50 A primary</span></div>
+                    <div class="spec-row"><span class="spec-label">Measurement Range</span><span class="spec-value">±175 A</span></div>
+                    <div class="spec-row"><span class="spec-label">Accuracy</span><span class="spec-value">±0.5%</span></div>
+                    <div class="spec-row"><span class="spec-label">Bandwidth</span><span class="spec-value">450 kHz</span></div>
+                    <div class="spec-row"><span class="spec-label">Response Time</span><span class="spec-value">&lt;1 µs</span></div>
+                    <div class="spec-row"><span class="spec-label">Supply</span><span class="spec-value">3.3V or 5V</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🌡️</span> Temperature Sensing - Power Stage</h3>
+                    <div class="spec-row"><span class="spec-label">Sensor Type</span><span class="spec-value highlight">NTC Thermistor</span></div>
+                    <div class="spec-row"><span class="spec-label">NTC Spec</span><span class="spec-value">10kΩ @ 25°C, B=3950</span></div>
+                    <div class="spec-row"><span class="spec-label">Mounting</span><span class="spec-value">Heatsink near MOSFET</span></div>
+                    <div class="spec-row"><span class="spec-label">Sensors per Phase</span><span class="spec-value">2 minimum</span></div>
+                    <div class="spec-row"><span class="spec-label">Total Heatsink Sensors</span><span class="spec-value">6-8</span></div>
+                    <div class="spec-row"><span class="spec-label">Accuracy</span><span class="spec-value">±1°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Range</span><span class="spec-value">-40 to +150°C</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📊</span> Voltage Sensing</h3>
+                    <div class="spec-row"><span class="spec-label">DC Bus Sensing</span><span class="spec-value highlight">AMC1311 (Isolated)</span></div>
+                    <div class="spec-row"><span class="spec-label">Divider Ratio</span><span class="spec-value">301:1</span></div>
+                    <div class="spec-row"><span class="spec-label">DC Accuracy</span><span class="spec-value">±0.5%</span></div>
+                    <div class="spec-row"><span class="spec-label">AC Phase Sensing</span><span class="spec-value">Resistor Divider</span></div>
+                    <div class="spec-row"><span class="spec-label">Neutral Point</span><span class="spec-value">Differential</span></div>
+                    <div class="spec-row"><span class="spec-label">ADC</span><span class="spec-value">STM32G474 12-bit</span></div>
+                    <div class="spec-row"><span class="spec-label">Sampling Rate</span><span class="spec-value">100 kHz/channel</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- MAGNETICS SECTION -->
+        <div id="magnetics" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Magnetics Design (100 kHz Optimized)</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">🧲</span> AC Filter Inductor (Lc) - Per Phase</h3>
+                    <div class="spec-row"><span class="spec-label">Inductance</span><span class="spec-value highlight">60 µH</span></div>
+                    <div class="spec-row"><span class="spec-label">Current Rating</span><span class="spec-value">180 A RMS</span></div>
+                    <div class="spec-row"><span class="spec-label">Saturation Current</span><span class="spec-value">270 A</span></div>
+                    <div class="spec-row"><span class="spec-label">Core Material</span><span class="spec-value highlight">Amorphous / Nanocrystalline</span></div>
+                    <div class="spec-row"><span class="spec-label">Core Type</span><span class="spec-value">Toroidal or EE-Core</span></div>
+                    <div class="spec-row"><span class="spec-label">Winding</span><span class="spec-value">Litz wire (AWG 38 × 500)</span></div>
+                    <div class="spec-row"><span class="spec-label">DC Resistance</span><span class="spec-value">&lt;2 mΩ</span></div>
+                    <div class="spec-row"><span class="spec-label">Quantity</span><span class="spec-value">3 (one per phase)</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🔗</span> Grid Inductor (Lg) - Per Phase</h3>
+                    <div class="spec-row"><span class="spec-label">Inductance</span><span class="spec-value highlight">20 µH</span></div>
+                    <div class="spec-row"><span class="spec-label">Current Rating</span><span class="spec-value">180 A RMS</span></div>
+                    <div class="spec-row"><span class="spec-label">Core Material</span><span class="spec-value">Amorphous / Powder Core</span></div>
+                    <div class="spec-row"><span class="spec-label">Winding</span><span class="spec-value">Litz wire</span></div>
+                    <div class="spec-row"><span class="spec-label">DC Resistance</span><span class="spec-value">&lt;1 mΩ</span></div>
+                    <div class="spec-row"><span class="spec-label">Quantity</span><span class="spec-value">3 (one per phase)</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🌀</span> Common Mode Choke</h3>
+                    <div class="spec-row"><span class="spec-label">CM Inductance</span><span class="spec-value highlight">3 mH</span></div>
+                    <div class="spec-row"><span class="spec-label">DM Inductance</span><span class="spec-value">&lt;10 µH (low)</span></div>
+                    <div class="spec-row"><span class="spec-label">Current Rating</span><span class="spec-value">180 A</span></div>
+                    <div class="spec-row"><span class="spec-label">Core Material</span><span class="spec-value highlight">Nanocrystalline</span></div>
+                    <div class="spec-row"><span class="spec-label">Attenuation</span><span class="spec-value">&gt;30 dB @ 150kHz</span></div>
+                    <div class="spec-row"><span class="spec-label">Purpose</span><span class="spec-value">EMI suppression</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">⚡</span> Gate Driver Isolation</h3>
+                    <div class="spec-row"><span class="spec-label">Type</span><span class="spec-value highlight">Isolated DC-DC</span></div>
+                    <div class="spec-row"><span class="spec-label">Topology</span><span class="spec-value">Push-Pull or Flyback</span></div>
+                    <div class="spec-row"><span class="spec-label">Primary Voltage</span><span class="spec-value">12-24 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">Secondary Voltage</span><span class="spec-value">+18V / -4V</span></div>
+                    <div class="spec-row"><span class="spec-label">Power per Output</span><span class="spec-value">2 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Isolation Voltage</span><span class="spec-value">&gt;5 kVRMS</span></div>
+                    <div class="spec-row"><span class="spec-label">CMTI</span><span class="spec-value">&gt;200 kV/µs</span></div>
+                    <div class="spec-row"><span class="spec-label">Quantity</span><span class="spec-value">9-18 supplies</span></div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 1rem;">
+                <h3><span class="icon">📐</span> Magnetic Design Constraints</h3>
+                <table>
+                    <tr><th>Parameter</th><th>Value</th><th>Notes</th></tr>
+                    <tr><td>Switching Frequency</td><td><span class="badge badge-green">100 kHz</span></td><td>Enables smaller cores</td></tr>
+                    <tr><td>Core Loss Limit</td><td>100 W/kg</td><td>At operating flux density</td></tr>
+                    <tr><td>Flux Density (Bmax)</td><td>0.3-0.5 T</td><td>Below saturation</td></tr>
+                    <tr><td>Fill Factor</td><td>40-50%</td><td>Litz wire consideration</td></tr>
+                    <tr><td>Thermal Class</td><td>H (180°C)</td><td>High temperature insulation</td></tr>
+                    <tr><td>Total Inductor Losses</td><td>&lt;150 W</td><td>All phases combined</td></tr>
+                </table>
+            </div>
+        </div>
+
+        <!-- THERMAL SECTION -->
+        <div id="thermal" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Thermal Analysis</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">🌡️</span> Operating Environment</h3>
+                    <div class="spec-row"><span class="spec-label">Ambient Range</span><span class="spec-value highlight">-30 to +60°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Full Power Ambient</span><span class="spec-value">≤45°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Derating Start</span><span class="spec-value">45°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Relative Humidity</span><span class="spec-value">5-95% (non-cond)</span></div>
+                    <div class="spec-row"><span class="spec-label">Max Altitude</span><span class="spec-value">2000 m</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🔥</span> Thermal Limits</h3>
+                    <div class="spec-row"><span class="spec-label">MOSFET Tj Max</span><span class="spec-value">175°C</span></div>
+                    <div class="spec-row"><span class="spec-label">MOSFET Tj Operating</span><span class="spec-value highlight">≤150°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Trip Threshold (Tj)</span><span class="spec-value">160°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Heatsink Max</span><span class="spec-value">85°C</span></div>
+                    <div class="spec-row"><span class="spec-label">Inductor Max</span><span class="spec-value">130°C</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">📉</span> Loss Budget @ 120kW</h3>
+                    <div class="spec-row"><span class="spec-label">Conduction (Main)</span><span class="spec-value">150 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Conduction (Bidir)</span><span class="spec-value">100 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Switching (Eon+Eoff)</span><span class="spec-value">450 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Body Diode</span><span class="spec-value">60 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Gate Driver</span><span class="spec-value">40 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Semiconductor Total</span><span class="spec-value highlight">800 W</span></div>
+                    <div class="spec-row"><span class="spec-label">Filter + Aux</span><span class="spec-value">200 W</span></div>
+                    <div class="spec-row"><span class="spec-label">TOTAL LOSSES</span><span class="spec-value highlight">~1,000 W</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">❄️</span> Cooling System</h3>
+                    <div class="spec-row"><span class="spec-label">Cooling Method</span><span class="spec-value highlight">Forced Air</span></div>
+                    <div class="spec-row"><span class="spec-label">Fan Configuration</span><span class="spec-value">2-4× Variable Speed</span></div>
+                    <div class="spec-row"><span class="spec-label">Required Airflow</span><span class="spec-value">~200 CFM</span></div>
+                    <div class="spec-row"><span class="spec-label">Heatsink Size</span><span class="spec-value">400×300×80 mm</span></div>
+                    <div class="spec-row"><span class="spec-label">TIM Requirement</span><span class="spec-value">≤0.1 K·cm²/W</span></div>
+                    <div class="spec-row"><span class="spec-label">Acoustic Noise</span><span class="spec-value">≤70 dBA @ 1m</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- PROTECTION SECTION -->
+        <div id="protection" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Protection System</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">🔋</span> DC Side Protection</h3>
+                    <div class="spec-row"><span class="spec-label">DC Over-Voltage Trip</span><span class="spec-value highlight">1050 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">DC OV Response</span><span class="spec-value">&lt;10 ms</span></div>
+                    <div class="spec-row"><span class="spec-label">DC Under-Voltage Trip</span><span class="spec-value highlight">680 VDC</span></div>
+                    <div class="spec-row"><span class="spec-label">DC UV Response</span><span class="spec-value">&lt;100 ms</span></div>
+                    <div class="spec-row"><span class="spec-label">DC Over-Current Trip</span><span class="spec-value">220 A (120%)</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">⚡</span> AC Side Protection</h3>
+                    <div class="spec-row"><span class="spec-label">AC Over-Voltage Trip</span><span class="spec-value highlight">+10% nominal</span></div>
+                    <div class="spec-row"><span class="spec-label">AC Under-Voltage Trip</span><span class="spec-value highlight">-15% nominal</span></div>
+                    <div class="spec-row"><span class="spec-label">AC OV/UV Response</span><span class="spec-value">&lt;100 ms</span></div>
+                    <div class="spec-row"><span class="spec-label">Over-Frequency Trip</span><span class="spec-value">+0.5 Hz</span></div>
+                    <div class="spec-row"><span class="spec-label">AC Over-Current Trip</span><span class="spec-value">150% rated</span></div>
+                    <div class="spec-row"><span class="spec-label">AC OC Response</span><span class="spec-value">&lt;1 ms</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">💥</span> Semiconductor Protection</h3>
+                    <div class="spec-row"><span class="spec-label">Short Circuit Detection</span><span class="spec-value highlight">&gt;200% rated</span></div>
+                    <div class="spec-row"><span class="spec-label">SC Response Time</span><span class="spec-value highlight">&lt;10 µs</span></div>
+                    <div class="spec-row"><span class="spec-label">DESAT Protection</span><span class="spec-value">Integrated in driver</span></div>
+                    <div class="spec-row"><span class="spec-label">DESAT Response</span><span class="spec-value">&lt;3 µs</span></div>
+                    <div class="spec-row"><span class="spec-label">Soft Turn-off</span><span class="spec-value">Yes (on fault)</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🌐</span> Grid Protection</h3>
+                    <div class="spec-row"><span class="spec-label">Anti-Islanding</span><span class="spec-value highlight">Passive + Active</span></div>
+                    <div class="spec-row"><span class="spec-label">Island Detection</span><span class="spec-value">&lt;2 s</span></div>
+                    <div class="spec-row"><span class="spec-label">Ground Fault Trip</span><span class="spec-value">&gt;300 mA</span></div>
+                    <div class="spec-row"><span class="spec-label">LVRT Compliance</span><span class="spec-value">IEEE 1547 Cat II</span></div>
+                    <div class="spec-row"><span class="spec-label">HVRT Compliance</span><span class="spec-value">IEEE 1547 Cat II</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- COMMUNICATION SECTION -->
+        <div id="comm" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Communication Interfaces</h2>
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">📡</span> RS485 / Modbus RTU</h3>
+                    <div class="spec-row"><span class="spec-label">Transceiver</span><span class="spec-value">MAX3485</span></div>
+                    <div class="spec-row"><span class="spec-label">Baud Rate</span><span class="spec-value">9600 - 115200 bps</span></div>
+                    <div class="spec-row"><span class="spec-label">Mode</span><span class="spec-value">Half-duplex, 2-wire</span></div>
+                    <div class="spec-row"><span class="spec-label">Termination</span><span class="spec-value">120Ω (switchable)</span></div>
+                    <div class="spec-row"><span class="spec-label">Isolation</span><span class="spec-value">SI8641 digital isolator</span></div>
+                    <div class="spec-row"><span class="spec-label">Max Cable Length</span><span class="spec-value">1200 m</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🌐</span> Ethernet / Modbus TCP</h3>
+                    <div class="spec-row"><span class="spec-label">PHY</span><span class="spec-value">LAN8720</span></div>
+                    <div class="spec-row"><span class="spec-label">Speed</span><span class="spec-value">10/100 Mbps</span></div>
+                    <div class="spec-row"><span class="spec-label">Connector</span><span class="spec-value">RJ45 with magnetics</span></div>
+                    <div class="spec-row"><span class="spec-label">Protocol</span><span class="spec-value">Modbus TCP server</span></div>
+                    <div class="spec-row"><span class="spec-label">Optional</span><span class="spec-value">MQTT client</span></div>
+                    <div class="spec-row"><span class="spec-label">IP Config</span><span class="spec-value">Static or DHCP</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🔌</span> CAN-FD (BMS Interface)</h3>
+                    <div class="spec-row"><span class="spec-label">Transceiver</span><span class="spec-value">TCAN1043</span></div>
+                    <div class="spec-row"><span class="spec-label">Speed</span><span class="spec-value highlight">Up to 5 Mbps</span></div>
+                    <div class="spec-row"><span class="spec-label">Isolation</span><span class="spec-value">ISO1042</span></div>
+                    <div class="spec-row"><span class="spec-label">BMS Data</span><span class="spec-value">SOC/SOH/V/I/T</span></div>
+                    <div class="spec-row"><span class="spec-label">Limits</span><span class="spec-value">Charge/Discharge</span></div>
+                    <div class="spec-row"><span class="spec-label">Heartbeat</span><span class="spec-value">100 ms timeout</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🔘</span> Digital I/O</h3>
+                    <div class="spec-row"><span class="spec-label">Digital Inputs</span><span class="spec-value">4× (24 VDC)</span></div>
+                    <div class="spec-row"><span class="spec-label">DI Isolation</span><span class="spec-value">Opto-isolated</span></div>
+                    <div class="spec-row"><span class="spec-label">DI Functions</span><span class="spec-value">E-Stop, Enable</span></div>
+                    <div class="spec-row"><span class="spec-label">Digital Outputs</span><span class="spec-value">4× Relay (5 A)</span></div>
+                    <div class="spec-row"><span class="spec-label">DO Functions</span><span class="spec-value">Run, Fault, Ready</span></div>
+                    <div class="spec-row"><span class="spec-label">LED Indicators</span><span class="spec-value">Status display</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TESTING SECTION -->
+        <div id="testing" class="section">
+            <h2 style="margin-bottom: 1.5rem;">Test Specifications</h2>
+            <div class="card" style="margin-bottom: 1.5rem;">
+                <h3><span class="icon">🧪</span> Test Categories Overview</h3>
+                <table>
+                    <tr><th>Category</th><th>Tests</th><th>Duration</th><th>Equipment</th></tr>
+                    <tr><td>Functional Tests</td><td>25</td><td>2 weeks</td><td>Grid simulator, battery emulator</td></tr>
+                    <tr><td>Performance Tests</td><td>15</td><td>1 week</td><td>Power analyzer, efficiency meter</td></tr>
+                    <tr><td>Protection Tests</td><td>20</td><td>1 week</td><td>Fault injection equipment</td></tr>
+                    <tr><td>Grid Compliance</td><td>12</td><td>2 weeks</td><td>PHIL setup, anti-islanding test</td></tr>
+                    <tr><td>EMC Tests</td><td>8</td><td>1 week</td><td>EMC chamber, spectrum analyzer</td></tr>
+                    <tr><td>Environmental</td><td>10</td><td>2 weeks</td><td>Climate chamber, vibration table</td></tr>
+                </table>
+            </div>
+            
+            <div class="grid grid-2">
+                <div class="card">
+                    <h3><span class="icon">✅</span> Critical Performance Tests</h3>
+                    <div class="spec-row"><span>Peak Efficiency (Inverter)</span><span class="badge badge-green">η ≥ 99.2%</span></div>
+                    <div class="spec-row"><span>Peak Efficiency (Rectifier)</span><span class="badge badge-green">η ≥ 98.8%</span></div>
+                    <div class="spec-row"><span>EU Weighted Efficiency</span><span class="badge badge-green">η ≥ 98.8%</span></div>
+                    <div class="spec-row"><span>Current THD</span><span class="badge badge-green">&lt;0.5% @ 100kHz</span></div>
+                    <div class="spec-row"><span>Power Ramp Rate</span><span class="badge badge-blue">1-100% per sec</span></div>
+                </div>
+                <div class="card">
+                    <h3><span class="icon">🛡️</span> Critical Protection Tests</h3>
+                    <div class="spec-row"><span>DC Over-Voltage</span><span class="badge badge-orange">1050V / &lt;10ms</span></div>
+                    <div class="spec-row"><span>Short Circuit</span><span class="badge badge-orange">&gt;200% / &lt;10µs</span></div>
+                    <div class="spec-row"><span>Anti-Islanding</span><span class="badge badge-orange">&lt;2 seconds</span></div>
+                    <div class="spec-row"><span>LVRT/HVRT</span><span class="badge badge-purple">IEEE 1547 Cat II</span></div>
+                    <div class="spec-row"><span>Ground Fault</span><span class="badge badge-orange">&gt;300mA trip</span></div>
+                </div>
+            </div>
+            
+            <div class="card" style="margin-top: 1rem;">
+                <h3><span class="icon">📋</span> Certification Standards</h3>
+                <div class="grid grid-4" style="margin-top: 1rem;">
+                    <div class="comm-block"><strong>Safety</strong><br><span style="color: var(--accent-green);">IEC 62477-1, UL 1741 SB</span></div>
+                    <div class="comm-block"><strong>Grid</strong><br><span style="color: var(--accent-blue);">IEEE 1547-2018</span></div>
+                    <div class="comm-block"><strong>EMC</strong><br><span style="color: var(--accent-purple);">IEC 61000-6-4</span></div>
+                    <div class="comm-block"><strong>Enclosure</strong><br><span style="color: var(--accent-orange);">IP55</span></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p><strong>120 kW Hybrid Inverter System</strong> | Document Version 2.1 | December 2025</p>
+        <p style="margin-top: 0.5rem;">Power Electronics Engineering Team</p>
+    </footer>
+
+    <script>
+        function showSection(sectionId) {
+            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+            document.getElementById(sectionId).classList.add('active');
+            event.target.classList.add('active');
+        }
+
+        document.querySelectorAll('.collapsible').forEach(item => {
+            item.addEventListener('click', () => item.classList.toggle('open'));
+        });
+
+        document.querySelectorAll('.block').forEach(block => {
+            block.addEventListener('click', function() {
+                const title = this.querySelector('.block-title').textContent;
+                alert(`${title}\n\nClick on the Architecture tab for detailed specifications.`);
+            });
+        });
+    </script>
+</body>
+</html>
+
