@@ -1,0 +1,5 @@
+Record=TopLevelDocument|FileName=01_REVISION_HISTORY.SchDoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=01_REVISION_HISTORY.SchDoc|FileName=02_BLOCK_DIAGRAM.SchDoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=01_REVISION_HISTORY.SchDoc|FileName=03_CONNECTOR.SchDoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=01_REVISION_HISTORY.SchDoc|FileName=04_MCU.SchDoc|SheetNumber= 
+Record=NoMainPathDocument|SourceDocument=01_REVISION_HISTORY.SchDoc|FileName=05_BUFFERS.SchDoc|SheetNumber= 

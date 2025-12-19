@@ -1,0 +1,24 @@
+# 120kW Hybrid Inverter Monitoring Software
+# Python 3.9+
+
+# Serial/Modbus Communication
+pyserial>=3.5
+pymodbus>=3.6.0
+
+# GUI Framework
+customtkinter>=5.2.0
+tkinter-tooltip>=2.1.0
+
+# Data Visualization
+matplotlib>=3.8.0
+numpy>=1.26.0
+
+# Data Logging
+pandas>=2.1.0
+
+# Configuration
+pyyaml>=6.0.1
+
+# Utilities
+python-dateutil>=2.8.2
+

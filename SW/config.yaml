@@ -1,0 +1,53 @@
+# 120kW Hybrid Inverter Monitor Configuration
+
+# Communication Settings
+communication:
+  type: "modbus_rtu"  # modbus_rtu or modbus_tcp
+  
+  # RS485 / Serial Settings
+  serial:
+    port: "COM3"           # Windows: COM3, Linux: /dev/ttyUSB0
+    baudrate: 115200
+    parity: "N"            # N=None, E=Even, O=Odd
+    stopbits: 1
+    timeout: 1.0           # seconds
+    
+  # Modbus TCP Settings (if using Ethernet)
+  tcp:
+    host: "192.168.1.100"
+    port: 502
+    
+  # Modbus Parameters
+  modbus:
+    slave_address: 1
+    timeout: 1.0
+
+# Data Logging
+logging:
+  enabled: true
+  directory: "./logs"
+  file_prefix: "inverter_log"
+  interval_seconds: 1
+  max_file_size_mb: 100
+  
+# Display Settings
+display:
+  update_rate_ms: 500      # GUI refresh rate
+  trend_history_seconds: 300  # 5 minutes of trend data
+  theme: "dark"            # dark or light
+
+# Alarm Thresholds (for monitoring alerts)
+alarms:
+  vdc_high: 1020           # V
+  vdc_low: 720             # V
+  iac_high: 170            # A
+  temp_high: 75            # °C
+  efficiency_low: 95       # %
+
+# System Parameters (read-only reference)
+system:
+  rated_power_kw: 120
+  vdc_nominal: 850
+  vac_nominal: 480
+  switching_freq_khz: 100
+
